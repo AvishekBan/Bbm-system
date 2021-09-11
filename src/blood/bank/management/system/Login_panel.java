@@ -108,7 +108,7 @@ public class Login_panel extends javax.swing.JFrame {
        try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= dbconnection.getCon();
-            String sql="Select * from user_details where username=? and password=?";
+            String sql="Select * from user_detail where username=? and password=?";
             PreparedStatement pst= con.prepareStatement(sql);
              pst.setString(1,username.getText());
              pst.setString(2,password.getText());
