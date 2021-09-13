@@ -5,9 +5,16 @@
  */
 package blood.bank.management.system;
 
+import Database.dbconnection;
 import java.awt.Dimension;
 
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -152,7 +159,22 @@ public class StockDecrease extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+        String bloodGroup= (String)jComboBox_bg.getSelectedItem();
+        String unit=jTextField1.getText();
+        int unit1=Integer.parseInt(unit);
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            st.executeUpdate("update stock set Units=Units -'"+unit1+"' where BloodGroup='"+bloodGroup+"' ");
+            JOptionPane.showMessageDialog(null,"<html><b style=\"color:green; font-size:20px;\">Successfully Updated!!!</b></html>");
+            setVisible(false);
+            new StockDecrease().setVisible(true);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -161,11 +183,29 @@ public class StockDecrease extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-       
+       try
+        {
+            jTable1.print(JTable.PrintMode.NORMAL);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-       
+       try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            ResultSet rs=st.executeQuery("select * from stock");           
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+      
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }
     }//GEN-LAST:event_formComponentShown
 
     /**

@@ -6,9 +6,16 @@
 package blood.bank.management.system;
 
 
+import Database.dbconnection;
 import java.awt.Dimension;
 
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -136,11 +143,30 @@ public class Search_Donor_Group extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+        String empbg=jTextField_search.getText();
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            ResultSet rs=st.executeQuery("select * from donor_info where BloodGroup like '%"+empbg+"%'");
+//            jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+        try
+        {
+            jTable1.print(JTable.PrintMode.NORMAL);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

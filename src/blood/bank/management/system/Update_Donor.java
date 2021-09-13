@@ -6,8 +6,13 @@
 package blood.bank.management.system;
 
 
+import Database.dbconnection;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -285,11 +290,36 @@ public class Update_Donor extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField_bgActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       
+   String donorId= jTextField_search.getText();
+        String name= jTextField_n.getText();
+        String fathername= jTextField_fn.getText();
+        String mothername= jTextField_mn.getText();
+        String dob= jTextField_dob.getText();
+        String mobilenumber= jTextField_mob.getText();
+        String gender=jTextField_gender.getText();
+        String email= jTextField_email.getText();
+        String bloodgroup=jTextField_bg.getText();
+        String city= jTextField_ct.getText();
+        String Address= jTextArea_add.getText();
+
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            st.executeUpdate("update donor_info set Name='"+name+"',FatherName='"+fathername+"',MotherName='"+mothername+"',DOB='"+dob+"',MobileNumber='"+mobilenumber+"',Gender='"+gender+"',Email='"+email+"',BloodGroup='"+bloodgroup+"',City='"+city+"',Address='"+Address+"' where DonorID='"+donorId+"' ");
+            JOptionPane.showMessageDialog(null,"<html><b style=\"color:green; font-size:20px;\">Successfully Updated!!!</b></html>");
+            setVisible(false);
+            new Update_Donor().setVisible(true);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }       
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-      
+        setVisible(false);
+        new Update_Donor().setVisible(true);      
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -298,7 +328,35 @@ public class Update_Donor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+ String donorId=jTextField_search.getText();
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            ResultSet rs=st.executeQuery("select * from donor_info where DonorID='"+donorId+"'");
+            if(rs.next())
+             {
+                jTextField_n.setText(rs.getString(2));
+                jTextField_fn.setText(rs.getString(3));
+                jTextField_mn.setText(rs.getString(4));
+                jTextField_dob.setText(rs.getString(5));
+                jTextField_mob.setText(rs.getString(6));
+                jTextField_gender.setText(rs.getString(7));
+                jTextField_email.setText(rs.getString(8));
+                jTextField_bg.setText(rs.getString(9));
+                jTextField_ct.setText(rs.getString(10));
+                jTextArea_add.setText(rs.getString(11));
+                jTextField_search.setEditable(false);
+             }
+            else
+                 {
+                     JOptionPane.showMessageDialog(null,"<html><b style=\"color:red; font-size:20px;\">Donor ID Does Not Exist!!!</b></html>");
+                 }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
