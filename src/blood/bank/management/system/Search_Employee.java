@@ -4,9 +4,18 @@
  * and open the template in the editor.
  */
 package blood.bank.management.system;
+import Database.dbconnection;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -22,7 +31,12 @@ public class Search_Employee extends javax.swing.JFrame {
         Toolkit toolkit= getToolkit();
         Dimension size= toolkit.getScreenSize();
         setLocation(size.width/2-getWidth()/2,size.height/2- getHeight()/2);
-        
+         
+        jTable_bg.getTableHeader().setFont(new Font("Segoe UI",Font.BOLD,15));
+        jTable_bg.getTableHeader().setOpaque(false);
+        jTable_bg.getTableHeader().setBackground(new Color(32,136,203));
+        jTable_bg.getTableHeader().setForeground(new Color(255,255,255));
+        jTable_bg.setRowHeight(28);
         
     }
 
@@ -135,11 +149,30 @@ public class Search_Employee extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      
+      String employeeID=jTextField_bg.getText();
+//        int eid=Integer.parseInt(employeeID);
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            ResultSet rs=st.executeQuery("select * from employee_info where EmployeeID ='"+employeeID+"'");
+            jTable_bg.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        } 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+     try
+        {
+            jTable_bg.print(JTable.PrintMode.NORMAL);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }  
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

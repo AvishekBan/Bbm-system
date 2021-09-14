@@ -5,8 +5,17 @@
  */
 package blood.bank.management.system;
 
+import Database.dbconnection;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -22,7 +31,11 @@ public class Employee_Details extends javax.swing.JFrame {
         Toolkit toolkit= getToolkit();
         Dimension size= toolkit.getScreenSize();
         setLocation(size.width/2-getWidth()/2,size.height/2- getHeight()/2);
-        
+        jTable1.getTableHeader().setFont(new Font("Segoe UI",Font.BOLD,15));
+        jTable1.getTableHeader().setOpaque(false);
+        jTable1.getTableHeader().setBackground(new Color(32,136,203));
+        jTable1.getTableHeader().setForeground(new Color(255,255,255));
+        jTable1.setRowHeight(28);
     }
 
     /**
@@ -109,7 +122,19 @@ public class Employee_Details extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        
+       try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            ResultSet rs=st.executeQuery("select * from employee_info");
+//            jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
+            
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }  
     }//GEN-LAST:event_formComponentShown
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -118,7 +143,14 @@ public class Employee_Details extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+       try
+        {
+            jTable1.print(JTable.PrintMode.NORMAL);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        } 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

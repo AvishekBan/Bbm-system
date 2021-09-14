@@ -5,8 +5,14 @@
  */
 package blood.bank.management.system;
 
+import Database.dbconnection;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -254,11 +260,37 @@ public class Add_Employee extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField_ctActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       
+      String employeeID= jLabel3.getText();
+        String name= jTextField_n.getText();
+        String fathername= jTextField_fn.getText();
+        String mothername= jTextField_mn.getText();
+        SimpleDateFormat dformat= new SimpleDateFormat("dd-MM-yyyy");
+        String dob= dformat.format(jDateChooser_dob.getDate());
+        String mobilenumber= jTextField_mob.getText();
+        String gender=(String)jComboBox.getSelectedItem();
+        String email= jTextField_email.getText();
+        String bloodgroup=(String)jComboBox_bg.getSelectedItem();
+        String city= jTextField_ct.getText();
+        String Address= jTextArea_add.getText();
+
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            st.executeUpdate("insert into employee_info values ('"+employeeID+"','"+name+"','"+fathername+"','"+mothername+"','"+dob+"','"+mobilenumber+"','"+gender+"','"+email+"','"+bloodgroup+"','"+city+"','"+Address+"')");
+             JOptionPane.showMessageDialog(null,"<html><b style=\"color:green; font-size:20px;\">Successfully Updated!!!</b></html>");
+            setVisible(false);
+            new Add_Employee().setVisible(true);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }  
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+        setVisible(false);
+        new Add_Employee().setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -267,7 +299,29 @@ public class Add_Employee extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-      
+     try
+                {
+                    Connection con= dbconnection.getCon();
+                    Statement st=con.createStatement();
+                    ResultSet rs=st.executeQuery("select max(EmployeeID)from employee_info");
+                    
+                    if(rs.first())
+                      {
+                         int id=rs.getInt(1);
+                         id=id+1;
+                         String str=String.valueOf(id);
+                         jLabel3.setText(str);
+                      }
+                    
+                    else
+                      {
+                        jLabel3.setText("1");
+                      }
+                }
+        catch(Exception e)
+                {
+                    JOptionPane.showMessageDialog(null,e);
+                } 
                 
     }//GEN-LAST:event_formComponentShown
 

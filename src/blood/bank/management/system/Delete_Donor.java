@@ -5,8 +5,13 @@
  */
 package blood.bank.management.system;
 
+import Database.dbconnection;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -264,7 +269,35 @@ public class Delete_Donor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+       String donorId=jTextField_search.getText();
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            ResultSet rs=st.executeQuery("select * from donor_info where DonorID='"+donorId+"'");
+            if(rs.next())
+            {
+                jTextField_n.setText(rs.getString(2));
+                jTextField_fn.setText(rs.getString(3));
+                jTextField_mn.setText(rs.getString(4));
+                jTextField_dob.setText(rs.getString(5));
+                jTextField_mob.setText(rs.getString(6));
+                jTextField_gender.setText(rs.getString(7));
+                jTextField_email.setText(rs.getString(8));
+                jTextField_bg.setText(rs.getString(9));
+                jTextField_ct.setText(rs.getString(10));
+                jTextArea_add.setText(rs.getString(11));
+                jTextField_search.setEditable(false);
+            }
+            else
+            {
+                 JOptionPane.showMessageDialog(null,"<html><b style=\"color:red; font-size:20px;\">Donor ID Does Not Exist!!!</b></html>");
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField_nActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_nActionPerformed
@@ -288,11 +321,25 @@ public class Delete_Donor extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField_ctActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-      
+      String donorId= jTextField_search.getText();
+        try
+        {
+            Connection con= dbconnection.getCon();
+            Statement st=con.createStatement();
+            st.executeUpdate("delete from donor_info where DonorID='"+donorId+"' ");
+             JOptionPane.showMessageDialog(null,"<html><b style=\"color:green; font-size:20px;\">Successfully Deleted!!!</b></html>");
+            setVisible(false);
+            new Delete_Donor().setVisible(true);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        setVisible(false);
+        new Delete_Donor().setVisible(true); 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
